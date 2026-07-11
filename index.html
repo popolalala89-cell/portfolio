@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portofolio Project — Pa Popo & Hermes Agent</title>
+  <meta name="description" content="Portofolio lengkap project aplikasi yang dikerjakan oleh Pa Popo bersama Hermes Agent — dari Flask, React, hingga Google Apps Script.">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0a0a0f;
+      color: #e2e8f0;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+    /* Header */
+    header {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 20px;
+      background: linear-gradient(135deg, #0a0a0f 0%, #1a1040 50%, #0f172a 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%);
+      top: -200px; right: -200px;
+      animation: float 20s ease-in-out infinite;
+    }
+    header::after {
+      content: '';
+      position: absolute;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(168,85,247,0.1) 0%, transparent 70%);
+      bottom: -100px; left: -100px;
+      animation: float 25s ease-in-out infinite reverse;
+    }
+    @keyframes float {
+      0%, 100% { transform: translate(0,0) scale(1); }
+      33% { transform: translate(30px,-30px) scale(1.1); }
+      66% { transform: translate(-20px,20px) scale(0.9); }
+    }
+    header .content { position: relative; z-index: 1; }
+    header .badge {
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 100px;
+      background: rgba(99,102,241,0.15);
+      border: 1px solid rgba(99,102,241,0.3);
+      color: #818cf8;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      letter-spacing: 0.05em;
+    }
+    header h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    header h1 span { color: #818cf8; }
+    header p {
+      font-size: 1.1rem;
+      color: #94a3b8;
+      max-width: 600px;
+      margin: 0 auto 32px;
+    }
+    .header-stats {
+      display: flex;
+      gap: 40px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .header-stats .stat { text-align: center; }
+    .header-stats .num {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #818cf8;
+    }
+    .header-stats .label {
+      font-size: 0.8rem;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    /* Section */
+    section { padding: 80px 0; }
+    .section-label {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #818cf8;
+      margin-bottom: 8px;
+    }
+    .section-title {
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+    .section-desc {
+      color: #64748b;
+      max-width: 600px;
+      margin-bottom: 40px;
+      font-size: 0.95rem;
+    }
+
+    /* Project Cards */
+    .projects { display: flex; flex-direction: column; gap: 24px; }
+    .project-card {
+      background: linear-gradient(135deg, #13132a 0%, #1a1a35 100%);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 28px 32px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px;
+      height: 100%;
+      border-radius: 0 2px 2px 0;
+    }
+    .project-card:hover {
+      border-color: rgba(99,102,241,0.2);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+    .project-card .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+    .project-card .card-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .project-card .card-body { flex: 1; }
+    .project-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .project-card .card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .project-card .tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+    .tag-stack { background: rgba(99,102,241,0.12); color: #818cf8; }
+    .tag-domain { background: rgba(16,185,129,0.12); color: #34d399; }
+    .tag-status {
+      background: rgba(251,191,36,0.12); color: #fbbf24;
+    }
+    .tag-status-live { background: rgba(16,185,129,0.12); color: #34d399; }
+    .tag-status-frozen { background: rgba(148,163,184,0.12); color: #94a3b8; }
+    .project-card .card-desc {
+      font-size: 0.9rem;
+      color: #94a3b8;
+      line-height: 1.7;
+    }
+    .project-card .card-features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .project-card .feature-chip {
+      padding: 3px 10px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      font-size: 0.75rem;
+      color: #64748b;
+    }
+    .project-card .card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #818cf8;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .project-card .card-link:hover { color: #a5b4fc; }
+
+    /* Color themes per card */
+    .card-1::before { background: #f59e0b; }
+    .card-2::before { background: #3b82f6; }
+    .card-3::before { background: #10b981; }
+    .card-4::before { background: #818cf8; }
+    .card-5::before { background: #ef4444; }
+    .card-6::before { background: #06b6d4; }
+    .card-7::before { background: #64748b; }
+    .card-8::before { background: #8b5cf6; }
+
+    .icon-1 { background: rgba(245,158,11,0.12); }
+    .icon-2 { background: rgba(59,130,246,0.12); }
+    .icon-3 { background: rgba(16,185,129,0.12); }
+    .icon-4 { background: rgba(129,140,248,0.12); }
+    .icon-5 { background: rgba(239,68,68,0.12); }
+    .icon-6 { background: rgba(6,182,212,0.12); }
+    .icon-7 { background: rgba(100,116,139,0.12); }
+    .icon-8 { background: rgba(139,92,246,0.12); }
+
+    /* Stack section */
+    .stack-section {
+      background: linear-gradient(135deg, #0f172a, #1a1040);
+    }
+    .stack-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .stack-item {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+    .stack-item .si-icon { font-size: 2rem; margin-bottom: 8px; }
+    .stack-item h4 { font-size: 0.9rem; color: #fff; margin-bottom: 4px; }
+    .stack-item p { font-size: 0.78rem; color: #64748b; }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      color: #475569;
+      font-size: 0.85rem;
+    }
+    footer a { color: #818cf8; text-decoration: none; }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .project-card { padding: 20px; }
+      .project-card .card-top { flex-direction: column; }
+      .header-stats { gap: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="content">
+    <div class="badge">📂 Portofolio Project</div>
+    <h1>Dibangun oleh <span>Pa Popo</span><br>bersama <span>Hermes Agent</span></h1>
+    <p>Kumpulan aplikasi web, sistem manajemen, dan tools digital — dari Flask, React, hingga Google Apps Script — untuk bisnis dan operasional sehari-hari.</p>
+    <div class="header-stats">
+      <div class="stat"><div class="num">8</div><div class="label">Project</div></div>
+      <div class="stat"><div class="num">5</div><div class="label">Stack Berbeda</div></div>
+      <div class="stat"><div class="num">2</div><div class="label">Domain Live</div></div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <div class="section-label">📋 Daftar Project</div>
+    <h2 class="section-title">Semua Project</h2>
+    <p class="section-desc">Dari aplikasi operasional gudang hingga landing page UMKM — semua dibangun dari Termux di HP Android.</p>
+
+    <div class="projects">
+
+      <!-- 1 -->
+      <div class="project-card card-1">
+        <div class="card-top">
+          <div class="card-icon icon-1">🔄</div>
+          <div class="card-body">
+            <h3>APK RETOK</h3>
+            <div class="card-meta">
+              <span class="tag tag-stack">Flask + SQLite/MariaDB</span>
+              <span class="tag tag-domain">Termux & Windows</span>
+              <span class="tag tag-status">✅ Selesai</span>
+            </div>
+            <p class="card-desc">
+              Aplikasi untuk mengelola data retur/retok toko. Capture kamera untuk bukti retur, import CSV, master data toko & produk, export Excel. Di-refactor dengan Flask Blueprint pattern agar modular.
+            </p>
+            <div class="card-features">
+              <span class="feature-chip">📸 Capture Kamera</span>
+              <span class="feature-chip">📥 Import CSV</span>
+              <span class="feature-chip">📊 Export Excel</span>
+              <span class="feature-chip">🔧 Flask Blueprint</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2 -->
+      <div class="project-card card-2">
+        <div class="card-top">
+          <div class="card-icon icon-2">📧</div>
+          <div class="card-body">
+            <h3>Email PLU Distributor</h3>
+            <div class="card-meta">
+              <span class="tag tag-stack">Flask + Outlook COM</span>
+              <span class="tag tag-domain">Windows (port 8100)</span>
+              <span class="tag tag-status">✅ Selesai</span>
+            </div>
+            <p class="card-desc">
+              Blast email massal ke distributor PLU. Upload Excel, group by store, generate HTML email dengan format rupiah otomatis, kirim via Outlook dengan reuse session untuk performa. Fitur reply tracking.
+            </p>
+            <div class="card-features">
+              <span class="feature-chip">📤 Upload Excel</span>
+              <span class="feature-chip">🏬 Group by Store</span>
+              <span class="feature-chip">💰 Format Rupiah</span>
+              <span class="feature-chip">📬 Outlook COM</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 -->
+      <div class="project-card card-3">
+        <div class="card-top">
+          <div class="card-icon icon-3">🍎</div>
+          <div class="card-body">
+            <h3>QC Penerimaan Buah</h3>
+            <div class="card-meta">
+              <span class="tag tag-stack">Flask + MariaDB</span>
+              <span class="tag tag-domain">Windows (port 9000)</span>
+              <span class="tag tag-status">✅ Selesai</span>
+            </div>
+            <p class="card-desc">
+              Aplikasi quality control untuk penerimaan buah di gudang. Form sampling QC, upload foto bukti, laporan hasil, notifikasi Telegram. Berjalan offline di Windows 7 dengan Python 3.8.
+            </p>
+            <div class="card-features">
+              <span class="feature-chip">📋 Form Sampling</span>
+              <span class="feature-chip">📸 Upload Foto</span>
+              <span class="feature-chip">📊 Laporan QC</span>
+              <span class="feature-chip">📱 Notif Telegram</span>
+              <span class="feature-chip">🔐 Login</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 -->
+      <div class="project-card card-4">
+        <div class="card-top">
+          <div class="card-icon icon-4">🚀</div>
+          <div class="card-body">
+            <h3>LaunchPage Studio</h3>
+            <div class="card-meta">
+              <span class="tag tag-stack">HTML/CSS/JS + Supabase</span>
+              <span class="tag tag-domain tag-status-live">mydigitalid.my.id</span>
+              <span class="tag tag-status-live">🌐 Live</span>
+            </div>
+            <p class="card-desc">
+              Platform jualan landing page untuk UMKM. Landing page profesional dengan 5 halaman demo (restoran, salon, freelancer, dimsum, bengkel). Dark mode, glassmorphism, animasi scroll, order modal dengan Supabase backend.
+            </p>
+            <div class="card-features">
+              <span class="feature-chip">🎨 M3 Design System</span>
+              <span class="feature-chip">🌙 Dark Mode</span>
+              <span class="feature-chip">🏪 5 Demo Pages</span>
+              <span class="feature-chip">💰 Pricing Table</span>
+              <span class="feature-chip">📱 Mobile First</span>
+              <span class="feature-chip">⚡ GitHub Pages</span>
+            </div>
+            <a class="card-link" href="https://mydigitalid.my.id" target="_blank">🌐 Kunjungi Site →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 -->
+      <div class="project-card card-5">
+        <div class="card-top">
+          <div class="card-icon icon-5">🥟</div>
+          <div class="card-body">
+            <h3>Dimsum Denaya</h3>
+            <div class="card-meta">
+              <span class="tag tag-stack">HTML/CSS/JS + Supabase</span>
+              <span class="tag tag-domain tag-status-live">dimsumdenaya.my.id</span>
+              <span class="tag tag-status-live">🌐 Live</span>
+            </div>
+            <p class="card-desc">
+              Website bisnis dimsum dengan sistem antrian digital & delivery order. QR scan untuk ambil nomor antrian, peta interaktif untuk ongkir otomatis, admin panel untuk kelola menu & antrian. Konversi dari Flask ke static + Supabase.
+            </p>
+            <div class="card-features">
+              <span class="feature-chip">📱 Antrian Digital</span>
+              <span class="feature-chip">🛵 Delivery Order</span>
+              <span class="feature-chip">🗺️ Peta Interaktif</span>
+              <span class="feature-chip">📍 Ongkir Otomatis</span>
+              <span class="feature-chip">🔐 Admin Panel</span>
+              <span class="feature-chip">🔄 QR Token</span>
+            </div>
+            <a class="card-link" href="https://dimsumdenaya.my.id" target="_blank">🌐 Kunjungi Site →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 -->
+      <div class="project-card card-6">
+        <div class="card-top">
+          <div class="card-icon icon-6">👟</div>
+          <div class="card-body">
+            <h3>Danee Shoes Care — React</h3>
+            <div class="card-meta">
+              <span class="tag tag-stack">React 19 + TypeScript + Supabase</span>
+              <span class="tag tag-domain">Termux / APK</span>
+              <span class="tag tag-status">✅ Selesai</span>
+            </div>
+            <p class="card-desc">
+              Aplikasi manajemen bisnis cuci & repair sepatu. 11 modul admin: dashboard, menu jasa & produk, orders, inventory, cashflow, profit sharing (engine 8 dompet), CMS konten web, diskon, referral. Migrasi total dari Google Apps Script ke React + Supabase dalam 5 fase.
+            </p>
+            <div class="card-features">
+              <span class="feature-chip">📊 Dashboard</span>
+              <span class="feature-chip">📦 Orders + Status</span>
+              <span class="feature-chip">💰 Profit Sharing</span>
+              <span class="feature-chip">📈 Inventory</span>
+              <span class="feature-chip">🧾 Cashflow</span>
+              <span class="feature-chip">🔗 Referral</span>
+              <span class="feature-chip">🎨 Theme Settings</span>
+              <span class="feature-chip">📱 Slide + Swipe</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7 -->
+      <div class="project-card card-7">
+        <div class="card-top">
+          <div class="card-icon icon-7">📜</div>
+          <div class="card-body">
+            <h3>Danee Shoes Care — GAS (Legacy)</h3>
+            <div class="card-meta">
+              <span class="tag tag-stack">Google Apps Script + Sheets</span>
+              <span class="tag tag-domain">script.google.com</span>
+              <span class="tag tag-status-frozen">❄️ Frozen</span>
+            </div>
+            <p class="card-desc">
+              Versi legacy dari Danee Shoes Care. Backend Google Apps Script dengan 17 endpoint API, database 10 sheet. Semua fitur (orders, inventory, profit sharing, referral, diskon, struk) sudah di-porting ke versi React/Supabase. Disimpan sebagai referensi.
+            </p>
+            <div class="card-features">
+              <span class="feature-chip">⚙️ 17 Endpoint API</span>
+              <span class="feature-chip">📊 10 Google Sheets</span>
+              <span class="feature-chip">📝 Cetak Struk</span>
+              <span class="feature-chip">🔍 Tracking Referral</span>
+              <span class="feature-chip">📤 Upload Drive</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8 -->
+      <div class="project-card card-8">
+        <div class="card-top">
+          <div class="card-icon icon-8">📐</div>
+          <div class="card-body">
+            <h3>Selisih Fisik vs Data</h3>
+            <div class="card-meta">
+              <span class="tag tag-stack">Google Apps Script</span>
+              <span class="tag tag-domain">script.google.com</span>
+              <span class="tag tag-status-live">✅ Live</span>
+            </div>
+            <p class="card-desc">
+              Aplikasi input selisih stok fisik vs data sistem untuk gudang. Upload CSV Prodmast, search/pilih PRDCD/PLU, input qty, otomatis hitung selisih. Fitur edit & hapus riwayat, export Excel/CSV. Versi v19 live.
+            </p>
+            <div class="card-features">
+              <span class="feature-chip">📥 Upload Prodmast</span>
+              <span class="feature-chip">🔎 Search PLU</span>
+              <span class="feature-chip">🧮 Hitung Otomatis</span>
+              <span class="feature-chip">📤 Export Excel</span>
+              <span class="feature-chip">✏️ Edit & Hapus</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="stack-section">
+  <div class="container">
+    <div class="section-label">🛠️ Teknologi</div>
+    <h2 class="section-title">Stack yang Digunakan</h2>
+    <p class="section-desc">Semua project dibangun dari Termux di HP Android, tanpa server mahal.</p>
+    <div class="stack-grid">
+      <div class="stack-item"><div class="si-icon">🐍</div><h4>Flask</h4><p>Python web framework untuk 3 project (APK Retok, Email PLU, QC Buah)</p></div>
+      <div class="stack-item"><div class="si-icon">⚛️</div><h4>React 19</h4><p>TypeScript + Vite untuk Danee Shoes Care versi baru</p></div>
+      <div class="stack-item"><div class="si-icon">📄</div><h4>HTML/CSS/JS</h4><p>Static site murni + M3 Design System untuk LaunchPage & Dimsum</p></div>
+      <div class="stack-item"><div class="si-icon">🔥</div><h4>Supabase</h4><p>Backend-as-a-Service untuk 3 project (LaunchPage, Dimsum, Danee React)</p></div>
+      <div class="stack-item"><div class="si-icon">📊</div><h4>Google Apps Script</h4><p>Backend + Sheets untuk 2 project (Danee GAS, Selisih Fisik)</p></div>
+      <div class="stack-item"><div class="si-icon">🐬</div><h4>MariaDB</h4><p>Database untuk QC Penerimaan Buah di Windows 7</p></div>
+      <div class="stack-item"><div class="si-icon">☁️</div><h4>GitHub Pages</h4><p>Hosting gratis + custom domain untuk 2 website live</p></div>
+      <div class="stack-item"><div class="si-icon">📱</div><h4>Termux</h4><p>Lingkungan develop dari HP Android — semua project dibuat di sini</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>Portofolio ini dibuat oleh <a href="https://github.com/popolalala89-cell" target="_blank">Pa Popo</a> bersama <strong>Hermes Agent</strong> — Nous Research</p>
+    <p style="margin-top: 8px;">Semua project dikerjakan dari HP Android via Termux 🚀</p>
+  </div>
+</footer>
+
+</body>
+</html>
